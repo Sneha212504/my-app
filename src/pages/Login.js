@@ -7,15 +7,19 @@ export default function Login({ redirectTo }) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setError('');
     if (!email || !password) {
       setError('Email and password are required');
       return;
     }
-    login(email, password);
-    window.location.hash = redirectTo || '/dashboard';
+    try {
+      await login(email, password);
+      window.location.hash = redirectTo || '/dashboard';
+    } catch (err) {
+      setError(err?.message || 'Login failed');
+    }
   }
 
   return (

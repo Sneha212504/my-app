@@ -20,15 +20,19 @@ export default function Register() {
     }
   }, []);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setError('');
     if (!name || !email || !password) {
       setError('Name, email and password are required');
       return;
     }
-    const user = register({ name, email, address, coords });
-    if (user) window.location.hash = '/dashboard';
+    try {
+      await register({ name, email, password, address, coords });
+      window.location.hash = '/dashboard';
+    } catch (err) {
+      setError(err?.message || 'Registration failed');
+    }
   }
 
   return (
